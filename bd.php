@@ -66,23 +66,23 @@ class Database{
         return $result;
     }
     public function insertUsuario($usuario){
-        $query = "INSERT INTO 'users'('nombre', 'apellido', 'correo', 'nom_usuario', 'pass') VALUES
-         (". $usuario->nombre.",".$usuario->apellido.",".$usuario->correo.",".$usuario->user_name.",".$usuario->pass.")";
-        $this->executeQuery($query);
+        $query = "INSERT INTO users(nombre, apellido, correo, nom_usuario, pass) VALUES
+         ( '$usuario->nombre','$usuario->apellido','$usuario->correo','$usuario->user_name','$usuario->pass')";
+        return $this->executeQuery($query);
     }
     public function getUsuario($name){
-        $query = "SELECT 'nombre', 'apellido', 'correo', 'nom_usuario', 'pass' FROM 'users' WHERE nom_usuario ==". $name;
+        $query = "SELECT nombre, apellido, correo, nom_usuario, pass FROM users WHERE nom_usuario ==". $name;
         $pre = mysqli_fetch_array ($this->executeQuery($query));
         $usuario = new Usuario($this->db);
         $usuario->setAllParameters($pre["nom_usuario"],$pre["pass"],$pre["nombre"],$pre["apellido"],$pre["correo"]);
         return $usuario;
     }
     public function deleteUsuario($name){
-        $query = "DELETE FROM 'users' WHERE nom_usuario == ". $name;
+        $query = "DELETE FROM users WHERE nom_usuario == ". $name;
         $this->executeQuery($query); 
     }
     public function getOferta($oferta){
-        $query = "SELECT 'titulo', 'imagen', 'descripcion' FROM 'ofertas' WHERE titulo ==". $oferta;
+        $query = "SELECT titulo, imagen, descripcion FROM ofertas WHERE titulo ==". $oferta;
         $pre = mysqli_fetch_array ($this->executeQuery($query));
         $oferta = new Oferta($this->db);
         $oferta->setAllParameters(base64_decode($pre["imagen"]),$pre["titulo"],$pre["descripcion"]);

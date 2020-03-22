@@ -2,12 +2,12 @@
 
 class Usuario{
 
-    public $nombre;
-    public $apellido;
-    public $user_name;
-    public $pass;
-    public $correo;
-    public $db;
+    public $nombre = "";
+    public $apellido = "";
+    public $user_name = "";
+    public $pass = "";
+    public $correo = "";
+    public $db = "";
 
     public function __construct($db)
     {

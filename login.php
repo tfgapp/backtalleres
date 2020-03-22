@@ -8,7 +8,10 @@ include_once("./iniciarbd.php");
  $pass = $_POST['pass'];
  global $db;
  if(!empty($userName) && !empty($pass)) {
-    
+    throw new Exception ('Usuario o contraseñas vacio');
+}
+else{
+    if()
 }
 ?>
 
