@@ -3,17 +3,33 @@ include_once("./bd.php");
 include_once("./usuario.php");
 include_once("./ofertas.php");
 include_once("./iniciarbd.php");
+global $db;
 
- $userName = $_POST['nombre'];
- $pass = $_POST['pass'];
- global $db;
- if(!empty($userName) && !empty($pass)) {
-    throw new Exception ('Usuario o contraseñas vacio');
+
+$json = file_get_contents('php://input');
+$obj = json_decode($json,true);
+
+ $userName = $obj['nombre'];
+ $pass = $obj['pass'];
+
+
+
+ if(empty($userName) || empty($pass)) {
+    $mensaje= "Usuario o contraseña vacios";
+            $mensajeJson = json_encode($mensaje);
+            echo $mensajeJson; 
 }
 else{
-    if()
+    $usuario = $db->getUsuario($userName);
+    if($usuario->user_name != "sin usuario"){
+        if($usuario->pass == $pass){
+            $mensaje= "Login" ;
+            $mensajeJson = json_encode($mensaje);
+            echo $mensajeJson; 
+        }
+    }
 }
-?>
+
 
 
 ?>

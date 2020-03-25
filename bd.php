@@ -1,8 +1,9 @@
 <?php
 include_once("./usuario.php");
 include_once("./ofertas.php");
-class Database{
 
+class Database{
+ 
     protected $url;
     protected $user;
     protected $password;
@@ -22,8 +23,7 @@ class Database{
             $this->closeConnection();
         }
     }
-    protected function makeConnection(){
-
+    public function makeConnection(){
         $this->connection = new mysqli($this->url, $this->user, $this->password, $this->db);
         if($this->connection->connect_error){
             echo "Fail" . $this->connection->connect_error;
@@ -71,10 +71,12 @@ class Database{
         return $this->executeQuery($query);
     }
     public function getUsuario($name){
-        $query = "SELECT nombre, apellido, correo, nom_usuario, pass FROM users WHERE nom_usuario ==". $name;
-        $pre = mysqli_fetch_array ($this->executeQuery($query));
+        $query = "SELECT nombre, apellido, correo, nom_usuario, pass FROM users WHERE nom_usuario = '$name'";
+        $users = $this->executeQuery($query);
+        $pre= mysqli_fetch_array($users);
         $usuario = new Usuario($this->db);
-        $usuario->setAllParameters($pre["nom_usuario"],$pre["pass"],$pre["nombre"],$pre["apellido"],$pre["correo"]);
+        if($pre != NULL){$usuario->setAllParameters($pre["nom_usuario"],$pre["pass"],$pre["nombre"],$pre["apellido"],$pre["correo"]);}
+        else{@$usuario->setAllParameters("sin usuario",$pre["pass"],$pre["nombre"],$pre["apellido"],$pre["correo"]);}
         return $usuario;
     }
     public function deleteUsuario($name){
@@ -82,8 +84,8 @@ class Database{
         $this->executeQuery($query); 
     }
     public function getOferta($oferta){
-        $query = "SELECT titulo, imagen, descripcion FROM ofertas WHERE titulo ==". $oferta;
-        $pre = mysqli_fetch_array ($this->executeQuery($query));
+        $query = "SELECT titulo, imagen, descripcion FROM ofertas WHERE titulo =". $oferta;
+        $pre = mysqli_fetch_array($this->executeQuery($query), MYSQL_BOTH);
         $oferta = new Oferta($this->db);
         $oferta->setAllParameters(base64_decode($pre["imagen"]),$pre["titulo"],$pre["descripcion"]);
         return $oferta;

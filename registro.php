@@ -1,7 +1,7 @@
 <?php
 
 
-include_once("./bd.php");
+
 include_once("./usuario.php");
 include_once("./ofertas.php");
 include_once("./iniciarbd.php");
@@ -19,24 +19,21 @@ $usuario = $db->getUsuario($userName);
 /*email: email,
 user:user,
 password:password*/
-$checkUsuario = mysqli_fetch_array($usuario);
-if(isset($userName)&&isset($pass)&&isset($email)){
-    $usuario = $db->getUsuario($userName);
 
-    
-    $checkUsuario = mysqli_fetch_array($usuario);
-    if(!isset($checkUsuario)){
+if(isset($userName)&&isset($pass)&&isset($email)){
+    $usuario = @$db->getUsuario($userName);
+    if($usuario->nombre != "sin usuario"){
         
         $objUsuario = new Usuario($db);
         $objUsuario->setAllParameters($userName,$pass," "," ",$email);
-        
-        $MensajeDeOk = 'El usuario ha sido creado';
+        $db->insertUsuario($objUsuario);
+        $MensajeDeOk = "El usuario ha sido creado";
         $SuccessOkJson = json_encode($MensajeDeOk);
         echo $SuccessOkJson; 
         
     }
     else{
-        $mensajeDeFallo = 'Nombre de usuario existente';
+        $mensajeDeFallo = "Nombre de usuario existente";
         $failJson = json_encode($mensajeDeFallo);
         echo $failJson; 
     
@@ -44,14 +41,14 @@ if(isset($userName)&&isset($pass)&&isset($email)){
 }
 else{
 
-    $mensajeDeFallo = 'Parametros requeridos  completados';
+    $mensajeDeFallo = "Parametros requeridos  completados";
     $failJson = json_encode($mensajeDeFallo);
     echo $failJson; 
 
 }
 
  
-?>
+
 
 
 ?>
