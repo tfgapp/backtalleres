@@ -14,22 +14,21 @@ $obj = json_decode($json,true);
 
 
 
- if(empty($userName) || empty($pass)) {
-    $mensaje= "Usuario o contraseña vacios";
+ if(empty($userName) || empty($pass)) 
+ {
+    $mensaje= array("Usuario o contraseña vacios");
             $mensajeJson = json_encode($mensaje);
             echo $mensajeJson; 
 }
 else{
     $usuario = $db->getUsuario($userName);
+    $coches = $db->getCochesUsuario($usuario->user_key);
     if($usuario->user_name != "sin usuario"){
         if($usuario->pass == $pass){
-            $mensaje= "Login" ;
+            $mensaje= array("Login", $usuario->user_key,$coches);
             $mensajeJson = json_encode($mensaje);
             echo $mensajeJson; 
         }
     }
 }
-
-
-
 ?>

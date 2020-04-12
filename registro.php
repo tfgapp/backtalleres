@@ -1,7 +1,5 @@
 <?php
 
-
-
 include_once("./usuario.php");
 include_once("./ofertas.php");
 include_once("./iniciarbd.php");
@@ -21,11 +19,12 @@ user:user,
 password:password*/
 
 if(isset($userName)&&isset($pass)&&isset($email)){
-    $usuario = @$db->getUsuario($userName);
+   
     if($usuario->nombre != "sin usuario"){
         
         $objUsuario = new Usuario($db);
-        $objUsuario->setAllParameters($userName,$pass," "," ",$email);
+        $user_key = uniqid();
+        $objUsuario->setAllParameters($user_key,$userName,$pass," "," ",$email);
         $db->insertUsuario($objUsuario);
         $MensajeDeOk = "El usuario ha sido creado";
         $SuccessOkJson = json_encode($MensajeDeOk);

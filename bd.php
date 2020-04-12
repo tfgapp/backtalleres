@@ -1,6 +1,8 @@
 <?php
 include_once("./usuario.php");
 include_once("./ofertas.php");
+include_once("./coche.php");
+
 
 class Database{
  
@@ -66,18 +68,49 @@ class Database{
         return $result;
     }
     public function insertUsuario($usuario){
-        $query = "INSERT INTO users(nombre, apellido, correo, nom_usuario, pass) VALUES
-         ( '$usuario->nombre','$usuario->apellido','$usuario->correo','$usuario->user_name','$usuario->pass')";
+        $query = "INSERT INTO users(user_key, nombre, apellido, correo, nom_usuario, pass) VALUES
+         ( '$usuario->user_key', '$usuario->nombre','$usuario->apellido','$usuario->correo','$usuario->user_name','$usuario->pass')";
         return $this->executeQuery($query);
     }
     public function getUsuario($name){
-        $query = "SELECT nombre, apellido, correo, nom_usuario, pass FROM users WHERE nom_usuario = '$name'";
+        $query = "SELECT user_key, nombre, apellido, correo, nom_usuario, pass FROM users WHERE nom_usuario = '$name'";
         $users = $this->executeQuery($query);
         $pre= mysqli_fetch_array($users);
         $usuario = new Usuario($this->db);
-        if($pre != NULL){$usuario->setAllParameters($pre["nom_usuario"],$pre["pass"],$pre["nombre"],$pre["apellido"],$pre["correo"]);}
-        else{@$usuario->setAllParameters("sin usuario",$pre["pass"],$pre["nombre"],$pre["apellido"],$pre["correo"]);}
+        if($pre != NULL){$usuario->setAllParameters($pre["user_key"],$pre["nom_usuario"],$pre["pass"],$pre["nombre"],$pre["apellido"],$pre["correo"]);}
+        else{@$usuario->setAllParameters($pre["user_key"], "sin usuario",$pre["pass"],$pre["nombre"],$pre["apellido"],$pre["correo"]);}
         return $usuario;
+    }
+    public function getCochesUsuario($user_key)
+    {
+        $query = "SELECT user_key,indice, nombre, marca, tipo FROM coches WHERE user_key ='$user_key'";
+        $pre = $this->executeQuery($query);
+        if($pre->num_rows > 0)
+        {
+            $coches = array();
+            while($row = mysqli_fetch_array($pre))
+            { 
+                $userkey2 = $row['user_key'];
+                $indice = $row['indice'];
+                $nombre = $row['nombre'];
+                $marca = $row['marca'];
+                $tipo = $row['tipo'];
+                $coche = new Coche($this->db);
+                $coche->setAllParameters($userkey2, $indice, $nombre, $marca, $tipo);
+                array_push($coches, $coche);
+            }
+            return $coches;  
+        }
+        else
+        {
+            return("No hay coches que mostrar");
+        } 
+    }
+    public function crearCocheUsuario($user_key, $nombre, $marca, $tipo)
+    {
+        $query = "INSERT INTO coches(user_key, nombre, marca, tipo) VALUES ( '$user_key', '$nombre','$marca','$tipo')";
+        $pre = $this->executeQuery($query);
+        return $pre;
     }
     public function deleteUsuario($name){
         $query = "DELETE FROM users WHERE nom_usuario == ". $name;

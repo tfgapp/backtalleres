@@ -1,7 +1,8 @@
 <?php
 
-class Usuario{
-
+class Usuario
+{
+    public $user_key = "";
     public $nombre = "";
     public $apellido = "";
     public $user_name = "";
@@ -17,12 +18,14 @@ class Usuario{
     {
     
     }
-    public function setAllParameters($user_name, $pass, $nombre,$apellido,$correo){
+    public function setAllParameters($user_key, $user_name, $pass, $nombre,$apellido,$correo)
+    {
+        $this->user_key = $user_key;
         $this->nombre = $nombre;
         $this->apellido =$apellido;
         $this->user_name = $user_name;
         $this->pass = $pass;
         $this->correo = $correo;
     }
-   
 }
+?>
