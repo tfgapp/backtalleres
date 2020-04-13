@@ -81,6 +81,7 @@ class Database{
         else{@$usuario->setAllParameters($pre["user_key"], "sin usuario",$pre["pass"],$pre["nombre"],$pre["apellido"],$pre["correo"]);}
         return $usuario;
     }
+   
     public function getCochesUsuario($user_key)
     {
         $query = "SELECT user_key,indice, nombre, marca, tipo FROM coches WHERE user_key ='$user_key'";
@@ -123,5 +124,39 @@ class Database{
         $oferta->setAllParameters(base64_decode($pre["imagen"]),$pre["titulo"],$pre["descripcion"]);
         return $oferta;
     }
+     public function updateEspecificacionesCoche($especificaciones)
+    {
+    	if($this->getEspecificacionesCoche($especificaciones->user_key, $especificaciones->indice) != "No hay coches que mostrar")
+    	{
+        $query = "UPDATE especificaciones SET euros = '$especificaciones->euros', litros = '$especificaciones->litros', 'kilometros_totales' = $especificaciones->kilometros_totales  WHERE indice = $especificaciones->indice";
+        $pre = $this->executeQuery($query);
+		}
+        else
+        {
+        	$query = "INSERT INTO especificaciones (indice, euros, litros, kilometros_totales, kilometros_inicio) VALUES ('$especificaciones->indice','$especificaciones->euros','$especificaciones->litros','$especificaciones->kilometros_totales','$especificaciones->kilometros_totales')";
+            $pre = $this->executeQuery($query);
+        }
+        
+    }
+     public function getEspecificacionesCoche($user_key, $indice)
+    {
+        $query = "SELECT euros, litros, kilometros_totales, kilometros_inicio FROM especificaciones WHERE indice ='$indice'";
+        $p = $this->executeQuery($query);
+        if(@$p->num_rows > 0)
+        {   
+            $pre= mysqli_fetch_array($p);
+            $coche = new CocheEspecificaciones($this->db);
+            $coche->setAllParameters($user_key, $indice, $pre['euros'], $pre['litros'], $pre['kilometros_totales'], $pre['kilometros_inicio']);
+            $coche->setMediaLK();
+            $coche->setMediaEK();
+            $coche->setMediaEL();
+            return $coche;  
+        }
+        else
+        {
+            return("No hay coches que mostrar");
+        } 
+    } 
+
 }
 ?>
