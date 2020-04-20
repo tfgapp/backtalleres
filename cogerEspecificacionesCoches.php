@@ -12,9 +12,8 @@
     $indice = $obj['indice'];
 
     $coche = $db->getEspecificacionesCoche($user_key, $indice);
-    
 
-    if($coche == "No hay coches que mostrar")
+    if($coche == "No se encuentra el coche")
     {	
 		$exito = json_encode(array("No existe el coche"));
 		echo $exito;
@@ -24,4 +23,5 @@
 		$exito = json_encode(array("El coche existe",$coche));
 		echo $exito;
 	}
+
 ?>

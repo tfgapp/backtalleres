@@ -111,7 +111,6 @@ class Database{
     {
         $query = "INSERT INTO coches(user_key, nombre, marca, tipo) VALUES ( '$user_key', '$nombre','$marca','$tipo')";
         $pre = $this->executeQuery($query);
-        return $pre;
     }
     public function deleteUsuario($name){
         $query = "DELETE FROM users WHERE nom_usuario == ". $name;
@@ -136,7 +135,6 @@ class Database{
         	$query = "INSERT INTO especificaciones (indice, euros, litros, kilometros_totales, kilometros_inicio) VALUES ('$especificaciones->indice','$especificaciones->euros','$especificaciones->litros','$especificaciones->kilometros_totales','$especificaciones->kilometros_totales')";
             $pre = $this->executeQuery($query);
         }
-        
     }
      public function getEspecificacionesCoche($user_key, $indice)
     {
@@ -154,7 +152,7 @@ class Database{
         }
         else
         {
-            return("No hay coches que mostrar");
+            return("No se encuentra el coche");
         } 
     } 
 

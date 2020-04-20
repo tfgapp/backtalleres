@@ -4,6 +4,7 @@ class Coche
 {
     public $user_key = "";
     public $indice = null;
+    public $nombre = "";
     public $marca = "";
     public $tipo = "";
     public $db = "";
