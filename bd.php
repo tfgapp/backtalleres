@@ -111,6 +111,13 @@ class Database{
     {
         $query = "INSERT INTO coches(user_key, nombre, marca, tipo) VALUES ( '$user_key', '$nombre','$marca','$tipo')";
         $pre = $this->executeQuery($query);
+        return $pre;
+    }
+    public function borrarCoche($user_key, $indice)
+    {
+        $query = "DELETE FROM coches WHERE user_key = '$user_key' AND indice = '$indice';";
+        $pre = $this->executeQuery($query);
+        return $pre;
     }
     public function deleteUsuario($name){
         $query = "DELETE FROM users WHERE nom_usuario == ". $name;
@@ -123,9 +130,9 @@ class Database{
         $oferta->setAllParameters(base64_decode($pre["imagen"]),$pre["titulo"],$pre["descripcion"]);
         return $oferta;
     }
-     public function updateEspecificacionesCoche($especificaciones)
+    public function updateEspecificacionesCoche($especificaciones)
     {
-    	if($this->getEspecificacionesCoche($especificaciones->user_key, $especificaciones->indice) != "No hay coches que mostrar")
+    	if($this->getEspecificacionesCoche($especificaciones->user_key, $especificaciones->indice) != "No se encuentra el coche")
     	{
         $query = "UPDATE especificaciones SET euros = '$especificaciones->euros', litros = '$especificaciones->litros', 'kilometros_totales' = $especificaciones->kilometros_totales  WHERE indice = $especificaciones->indice";
         $pre = $this->executeQuery($query);
@@ -135,12 +142,13 @@ class Database{
         	$query = "INSERT INTO especificaciones (indice, euros, litros, kilometros_totales, kilometros_inicio) VALUES ('$especificaciones->indice','$especificaciones->euros','$especificaciones->litros','$especificaciones->kilometros_totales','$especificaciones->kilometros_totales')";
             $pre = $this->executeQuery($query);
         }
+        echo $pre;
     }
      public function getEspecificacionesCoche($user_key, $indice)
     {
         $query = "SELECT euros, litros, kilometros_totales, kilometros_inicio FROM especificaciones WHERE indice ='$indice'";
         $p = $this->executeQuery($query);
-        if(@$p->num_rows > 0)
+        if($p->num_rows > 0)
         {   
             $pre= mysqli_fetch_array($p);
             $coche = new CocheEspecificaciones($this->db);

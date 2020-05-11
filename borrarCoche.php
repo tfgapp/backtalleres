@@ -7,16 +7,11 @@
     $json = file_get_contents('php://input');
     $obj = json_decode($json,true);
 
-    $user_key = $obj['userKey'];
-    $nombre = $obj['nombre'];
-    $marca = $obj['marca'];
-    $tipo = $obj['tipo'];
+    $user_key = $obj['user_key'];
+    $indice = $obj['indice'];
 
-    $coches = array();
-    $db->crearCocheUsuario($user_key, $nombre, $marca, $tipo);
+    $db->borrarCoche($user_key, $indice);
     $coches = $db->getCochesUsuario($user_key);
-
-    $exito = json_encode(array("El coche ha sido creado",$coches));
+    $exito = json_encode(array("El coche ha sido borrado",$coches));
     echo $exito;
-
 ?>

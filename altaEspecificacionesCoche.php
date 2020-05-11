@@ -1,5 +1,4 @@
 <?php
-    include_once("./bd.php");
     include_once("./iniciarbd.php");
     include_once("./cocheEspecificaciones.php");
     global $db;
@@ -15,11 +14,10 @@
 
     $especificaciones = new CocheEspecificaciones($db);
     $especificaciones->setAllParameters($user_key, $indice, $euros, $litros, $kilometros_totales,0);
-    $db->updateEspecificacionesCoche($especificaciones);
     $especificaciones->setMediaLK();
     $especificaciones->setMediaEK();
     $especificaciones->setMediaEL();
-
+    $db->updateEspecificacionesCoche($especificaciones);
     $exito = json_encode(array("Correcto",$especificaciones));
     echo $exito;
 ?>
